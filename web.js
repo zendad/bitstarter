@@ -1,12 +1,14 @@
-var express = require('express');
+var http = require('http'),
+    fs = require('fs');
 
-var app = express.createServer(express.logger());
 
-fs = require('fs')
-fs.readFile('./index.html', 'utf8', function (err,data) {
-  if (err) {
-    return console.log(err);
-  }
-  var snowman = new Buffer(data)
-  snowman.toString("utf-8",data);
+fs.readFile('./index.html', function (err, html) {
+    if (err) {
+        throw err; 
+    }       
+    http.createServer(function(request, response) {  
+        response.writeHeader(200, {"Content-Type": "text/html"});  
+        response.write(html);  
+        response.end();  
+    }).listen(8000);
 });
